@@ -1,0 +1,38 @@
+{
+  "appName": "System",
+  "variables": {
+    "audioPath": "path/to/your/audio/files"
+  },
+  "appProfiles": [
+    {
+      "name": "default",
+      "configs": [
+        {
+          "label": "Move Cursor Left",
+          "hotkeys": ["h"]
+        },
+        {
+          "label": "Move Cursor Down",
+          "hotkeys": ["j"]
+        },
+        {
+          "label": "Move Cursor Up",
+          "hotkeys": ["k"]
+        },
+        {
+          "label": "Move Cursor Right",
+          "hotkeys": ["l"]
+        },
+        {
+          "label": "Remove Node Modules",
+          "enterAfterText": true,
+          "text": "rm -rf node_modules"
+        },
+        {
+          "label": "Running Apps",
+          "hotkeys": ["option", "command", "escape"]
+        }
+      ]
+    }
+  ]
+}
