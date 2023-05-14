@@ -1,4 +1,6 @@
-import { ColorKeyIds, SelectKeyIds, SliderKeyIds } from "./configs/ui/controls";
+import {
+  ControlState
+} from "./configs/ui/controls";
 
 export type ConfigSquare = {
   title: string;
@@ -41,17 +43,3 @@ export interface AppConfigEntry {
   appProfiles: AppProfile[];
 }
 
-// ColorControlIds
-// SelectControlIds
-// SliderControlIds
-// maybe find a way to auto infer these values based on the files or something
-export interface AppControlState {
-  slider?: Record<SliderKeyIds, number>;
-  select?: Record<SelectKeyIds, string>;
-  color?: Record<ColorKeyIds, string>;
-}
-
-export type AppControlStateGroupKeys = keyof AppControlState;
-
-export type AppControlStateKeys<T extends AppControlStateGroupKeys> =
-  keyof AppControlState[T];

@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import type { AppControlState } from "../types";
+import { ControlState } from "../configs/ui/controls";
 
 export const useSyncStateToLocalStorage = (
-  state: AppControlState,
+  state: ControlState,
   { autoSaveInterval = 2000, autoSaveEnabled = false } = {
     autoSaveInterval: 2000,
     autoSaveEnabled: false,

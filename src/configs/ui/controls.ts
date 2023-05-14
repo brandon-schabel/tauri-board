@@ -35,6 +35,15 @@ export type SliderControlConfig = {
   max: number;
 };
 
+export type InputControlConfig = {
+  type: "input";
+  component: "native-input";
+  title?: string;
+  info?: string;
+  name: string;
+  defaultValue: string;
+};
+
 const colorControls = {
   btnBgColor: {
     type: "color",
@@ -109,32 +118,47 @@ const sliderControls = {
   } as SliderControlConfig,
 };
 
+const inputControls = {
+  btnText: {
+    type: "input",
+    component: "native-input",
+    title: "Button Text",
+    name: "Button Text",
+    defaultValue: "Button",
+  } as InputControlConfig,
+};
+
 export const controlsConfig = {
   colorControls,
   selectControls,
   sliderControls,
+  inputControls,
 };
 
 export type ControlConfig = {
   colorControls: Record<ColorKeyIds, ColorControlConfig>;
   selectControls: Record<SelectKeyIds, SelectControlConfig>;
   sliderControls: Record<SliderKeyIds, SliderControlConfig>;
+  inputControls: Record<string, InputControlConfig>;
 };
 
 export type ColorKeyIds = keyof typeof controlsConfig.colorControls; // "btnBgColor" | "btnColor" | "bgColor"
 export type SelectKeyIds = keyof typeof controlsConfig.selectControls; // "buttonSize"
 export type SliderKeyIds = keyof typeof controlsConfig.sliderControls; // "btnTextSize" | "gridColumns"
+export type InputKeyIds = keyof typeof controlsConfig.inputControls; // "btnText"
 
 export type ControlState = {
   slider: Record<SliderKeyIds, number>;
   select: Record<SelectKeyIds, string>;
   color: Record<ColorKeyIds, string>;
+  input: Record<InputKeyIds, string>;
 };
 
 export function getDefaultControlState(): ControlState {
   const sliderDefaults: Record<SliderKeyIds, number> = {} as any;
   const selectDefaults: Record<SelectKeyIds, string> = {} as any;
   const colorDefaults: Record<ColorKeyIds, string> = {} as any;
+  const inputDefaults: Record<InputKeyIds, string> = {} as any;
 
   for (const key in controlsConfig.sliderControls) {
     const controlId = key as SliderKeyIds;
@@ -154,9 +178,21 @@ export function getDefaultControlState(): ControlState {
       controlsConfig.colorControls[controlId].defaultValue;
   }
 
+  for (const key in controlsConfig.inputControls) {
+    const controlId = key as InputKeyIds;
+    inputDefaults[controlId] =
+      controlsConfig.inputControls[controlId].defaultValue;
+  }
+
   return {
     slider: sliderDefaults,
     select: selectDefaults,
     color: colorDefaults,
+    input: inputDefaults,
   };
 }
+
+export type ControlStateGroupKeys = keyof ControlState;
+
+export type ControlStateKeys<T extends ControlStateGroupKeys> =
+  keyof ControlState[T];

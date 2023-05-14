@@ -1,37 +1,45 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import {
   ColorKeyIds,
+  ControlState,
+  InputKeyIds,
   SelectKeyIds,
   SliderKeyIds,
   getDefaultControlState,
 } from "../configs/ui/controls";
-import { AppControlState } from "../types";
 
 type ColorAction = {
   type: "color";
-  key: keyof AppControlState["color"];
+  key: keyof ControlState["color"];
   value: string;
 };
 
 type SliderAction = {
   type: "slider";
-  key: keyof AppControlState["slider"];
+  key: keyof ControlState["slider"];
   value: number;
 };
 
 type SelectAction = {
   type: "select";
-  key: keyof AppControlState["select"];
+  key: keyof ControlState["select"];
   value: string;
 };
 
-type Actions = ColorAction | SliderAction | SelectAction;
+type InputAction = {
+  type: "input";
+  key: keyof ControlState["input"];
+  value: string;
+};
+
+type Actions = ColorAction | SliderAction | SelectAction | InputAction;
 
 type StateContextValue = {
-  state: AppControlState;
+  state: ControlState;
   updateColor: (key: ColorKeyIds, value: ColorAction["value"]) => void;
   updateSlider: (key: SliderKeyIds, value: SliderAction["value"]) => void;
   updateSelect: (key: SelectKeyIds, value: SelectAction["value"]) => void;
+  updateInput: (key: InputKeyIds, value: InputAction["value"]) => void;
 };
 
 export const StateContext = createContext<StateContextValue | undefined>(
@@ -39,14 +47,11 @@ export const StateContext = createContext<StateContextValue | undefined>(
 );
 
 export function StateProvider({ children }: { children: React.ReactNode }) {
-  const initialState: AppControlState = getDefaultControlState();
+  const initialState: ControlState = getDefaultControlState();
 
   console.log({ initialState });
 
-  const reducer = (
-    state: AppControlState,
-    action: Actions
-  ): AppControlState => {
+  const reducer = (state: ControlState, action: Actions): ControlState => {
     switch (action.type) {
       case "color":
         return {
@@ -62,6 +67,11 @@ export function StateProvider({ children }: { children: React.ReactNode }) {
         return {
           ...state,
           select: { ...state.select, [action.key]: action.value },
+        };
+      case "input":
+        return {
+          ...state,
+          input: { ...state.input, [action.key]: action.value },
         };
       // default not needed if all cases  are handled(causes type issues)
       // default:
@@ -92,7 +102,14 @@ export function StateProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "select", key, value });
   };
 
-  const value = { state, updateColor, updateSlider, updateSelect };
+  const updateInput = (
+    key: InputAction["key"],
+    value: InputAction["value"]
+  ) => {
+    dispatch({ type: "input", key, value });
+  };
+
+  const value = { state, updateColor, updateSlider, updateSelect, updateInput };
 
   if (!StateContext) return <>{children}</>;
 
@@ -105,7 +122,7 @@ export function useAppState(
   {
     onStateUpdate,
   }: {
-    onStateUpdate?: (state: AppControlState) => void;
+    onStateUpdate?: (state: ControlState) => void;
   } = {
     onStateUpdate: undefined,
   }

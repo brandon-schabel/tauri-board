@@ -1,20 +1,25 @@
 import {
   ColorControlConfig,
   ColorKeyIds,
+  ControlStateGroupKeys,
+  ControlStateKeys,
+  InputControlConfig,
+  InputKeyIds,
   SelectControlConfig,
   SelectKeyIds,
   SliderControlConfig,
   SliderKeyIds,
   controlsConfig,
 } from "../configs/ui/controls";
-import { AppControlStateGroupKeys, AppControlStateKeys } from "../types";
 import { useAppState } from "../utils/use-app-state";
 import { ColorPicker } from "./color-picker";
+import { Input } from "./input";
 import { SelectDropdown } from "./select-dropdown";
 import { Slider } from "./slider";
 
 export const UIController = () => {
-  const { updateColor, updateSelect, updateSlider, state } = useAppState();
+  const { updateColor, updateSelect, updateSlider, updateInput, state } =
+    useAppState();
 
   const renderColorControl = (
     controlConfig: ColorControlConfig,
@@ -59,12 +64,27 @@ export const UIController = () => {
     />
   );
 
+  const renderInputControl = (
+    controlConfig: InputControlConfig,
+    id: InputKeyIds,
+    value: string | number | undefined
+  ) => {
+    return (
+      <Input
+        config={controlConfig}
+        id={id}
+        onChange={(value) => updateInput(id, value)}
+        value={value}
+      />
+    );
+  };
+
   return (
     <div className="grid grid-cols-3 gap-4">
       {Object.entries(controlsConfig).map(([groupKey, group]) => {
-        const typedGroupKey = groupKey as AppControlStateGroupKeys;
+        const typedGroupKey = groupKey as ControlStateGroupKeys;
         return Object.entries(group).map(([controlKey, controlConfig]) => {
-          const id = controlKey as AppControlStateKeys<typeof typedGroupKey>;
+          const id = controlKey as ControlStateKeys<typeof typedGroupKey>;
           const value = state[typedGroupKey]?.[id];
           // if (!value) {
           //   console.error("Error no value ui-controller", { id, value, typedGroupKey });
@@ -95,6 +115,12 @@ export const UIController = () => {
                     id as SliderKeyIds,
                     value
                   )}
+                </div>
+              );
+            case "input":
+              return (
+                <div key={controlKey}>
+                  {renderInputControl(controlConfig, id as InputKeyIds, value)}
                 </div>
               );
             default:

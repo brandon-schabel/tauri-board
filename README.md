@@ -13,3 +13,6 @@ This template should help get you started developing with Tauri, React and Types
 bash```
 pnpm run tauri dev
 ```
+
+
+Have text inputs that can be can take a "parseAs" property so that it can parse as a number, a string, JSON, a specific type, etc
