@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import { useSimulateKeyboard } from "../tauri-hooks/use-simulate-keyboard";
 import { AppConfigEntry } from "../types";
 import { useAppState } from "../utils/use-app-state";
 
@@ -8,6 +9,7 @@ export const AppConfigDisplay = ({
   appConfig: AppConfigEntry;
 }) => {
   const { state } = useAppState();
+  const { simulateKeyboardInput } = useSimulateKeyboard();
 
   const buttonStyle: CSSProperties = {
     backgroundColor: state.color?.btnBgColor,
@@ -35,11 +37,11 @@ export const AppConfigDisplay = ({
                 style={buttonStyle}
                 onClick={() => {
                   console.log("run macro here");
-                  // runMacro({
-                  //   enterAfterText: config.enterAfterText,
-                  //   hotkeys: config.hotkeys,
-                  //   text: config.text,
-                  // });
+
+                  // 3 second delay then run simulateKeyboardInput
+                  setTimeout(() => {
+                    simulateKeyboardInput(config?.text || "test texttttttt");
+                  }, 3000);
                 }}
                 key={index}
               >
