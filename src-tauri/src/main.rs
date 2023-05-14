@@ -2,11 +2,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 // Additional imports
-use enigo::{Enigo, Key, KeyboardControllable};
+use enigo::{Enigo, Key, KeyboardControllable, MouseButton, MouseControllable};
 // use tauri::Command;
 
 #[tauri::command]
 fn greet(name: &str) -> String {
+    println!("Hello, {}!", name);
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
@@ -16,25 +17,30 @@ struct KeyboardInput {
 }
 
 #[tauri::command]
-fn simulate_keyboard_input(input: KeyboardInput) {
-    let mut enigo = Enigo::new();
+fn simulate_keyboard_input(text: &str) {
     // log input
-    println!("Input: {}", input.text);
+    println!("Input: {}", text);
 
+    let mut enigo = Enigo::new();
 
+    enigo.mouse_move_to(500, 200);
+    enigo.mouse_click(MouseButton::Left);
+    enigo.key_sequence_parse("{+CTRL}a{-CTRL}{+SHIFT}Hello World{-SHIFT}");
 
-    // Press modifier keys, example: Ctrl+Shift
-    enigo.key_down(Key::Control);
-    enigo.key_down(Key::Shift);
+    // let mut enigo = Enigo::new();
 
-    // Type the text
-    for c in input.text.chars() {
-        enigo.key_sequence(&c.to_string());
-    }
+    // // Press modifier keys, example: Ctrl+Shift
+    // enigo.key_down(Key::Control);
+    // enigo.key_down(Key::Shift);
 
-    // Release modifier keys
-    enigo.key_up(Key::Shift);
-    enigo.key_up(Key::Control);
+    // // Type the text
+    // for c in input.text.chars() {
+    //     enigo.key_sequence(&c.to_string());
+    // }
+
+    // // Release modifier keys
+    // enigo.key_up(Key::Shift);
+    // enigo.key_up(Key::Control);
 }
 
 fn main() {

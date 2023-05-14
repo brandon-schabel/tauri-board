@@ -6,7 +6,9 @@ export const useSimulateKeyboard = () => {
     console.log("simulateKeyboardInput", { text });
     console.log(window.__TAURI_IPC__);
 
-    await invoke("simulate_keyboard_input", { input: text });
+    const result = await invoke("simulate_keyboard_input", { text });
+
+    console.log({ result });
   };
 
   return { simulateKeyboardInput };
