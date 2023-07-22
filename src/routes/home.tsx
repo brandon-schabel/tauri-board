@@ -1,21 +1,14 @@
+import { Link } from "@tanstack/router";
 import { invoke } from "@tauri-apps/api";
 import React from "react";
-import "./app.css";
-import { AppConfigDisplay } from "./components/app-config-display";
-import { UIController } from "./components/ui-controller";
-import defaultConfig from "./configs/apps/default.json";
-import "./index.css";
-import { StateProvider, useAppState } from "./utils/use-app-state";
+import "../app.css";
+import { AppConfigDisplay } from "../components/app-config-display";
+import { UIController } from "../components/ui-controller";
+import defaultConfig from "../configs/apps/default.json";
+import "../index.css";
+import { useAppState } from "../utils/use-app-state";
 
-export default function App() {
-  return (
-    <StateProvider>
-      <AppBody />
-    </StateProvider>
-  );
-}
-
-function AppBody() {
+export function HomePage() {
   const { state } = useAppState();
   const [name, setName] = React.useState("");
   const [greetMsg, setGreetMsg] = React.useState("");
@@ -52,6 +45,7 @@ function AppBody() {
             greet();
           }}
         >
+          <Link to="" />
           <input
             id="greet-input"
             onChange={(e) => setName(e.currentTarget.value)}
