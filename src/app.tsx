@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api";
-import React from "react";
+import { createFetchFactory, defaultErrorHandler } from "instant-bun";
+import React, { useEffect } from "react";
 import "./app.css";
 import { AppConfigDisplay } from "./components/app-config-display";
 import { UIController } from "./components/ui-controller";
@@ -15,10 +16,30 @@ export default function App() {
   );
 }
 
+// TODO: refactor the errror handler logic in the fetch factory, probably just
+// throw error, but we may have an option to catch the error so we don't accidentally crash apps
+const fetchFactory = createFetchFactory({
+  baseUrl: "http://localhost:8080",
+  errorHandler: defaultErrorHandler(),
+});
+
 function AppBody() {
   const { state } = useAppState();
   const [name, setName] = React.useState("");
   const [greetMsg, setGreetMsg] = React.useState("");
+
+  const getData = async () => {
+    console.log("running get data");
+    try {
+      await fetchFactory.get("/test");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   console.log({ state });
 
