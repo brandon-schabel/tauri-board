@@ -26,10 +26,17 @@ fn simulate_keyboard_input(text: &str) {
     enigo.mouse_move_to(500, 200);
     enigo.mouse_click(MouseButton::Left);
     enigo.key_sequence_parse("{+CTRL}a{-CTRL}{+SHIFT}Hello World{-SHIFT}");
+    // enigo.key_sequence_parse("{+Command}A{-Command}{+Command}C{-Command}");
+
+    enigo.key_down(Key::Meta);
+    enigo.key_down(Key::Meta);
+    enigo.key_up(Key::Meta);
+
+
 
     // let mut enigo = Enigo::new();
 
-    // // Press modifier keys, example: Ctrl+Shift
+    // // Press modifier keys, example: Ctrl+ShiftaHELLO WORLD
     // enigo.key_down(Key::Control);
     // enigo.key_down(Key::Shift);
 
